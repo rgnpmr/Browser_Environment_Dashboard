@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Environment Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      transition: background-color 0.3s ease;
+      background-color: lightgray;
+    }
+    header {
+      border-bottom: 2px solid;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      background-color: bisque;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    header p {
+      margin: 5px 0;
+    }
+
+    h1 {
+      margin: 0;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    button {
+      margin: 5px 0;
+    }
+    section button {
+      display: block;
+      margin: 5px 0;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Student Profile</h1>
+    <p><strong>Complete Name:</strong>Regine F. Pamor</p>
+    <p><strong>Sex:</strong> Female</p>
+    <p><strong>Address:</strong>Zone 6, Burabod Lagonoy</p>
+    <p><strong>Course, Year, and Section:</strong> BSIT 2B</p>
+    <p><strong>Name of School:</strong> Partido State University</p>
+    <p><strong>Semester and Academic Year:</strong> 2nd Sem, AY 2024-2025</p>
+    <p><strong>Subject Code and Title:</strong>PF2-Event Driven Programming</p>
+    <p><strong>Name of Subject Instructor:</strong>Arjay F. Abio</p>
+  </header>
+
+  <section id="browser-info">
+    <h2>Browser Information</h2>
+    <p id="browser"></p>
+    <p id="platform"></p>
+    <p id="java"></p>
+    <p id="resolution"></p>
+    <p id="availablescreen"></p>
+    <p id="colordepth"></p>
+  </section>
+
+  <section id="page-info">
+    <h2>Page Information and Controls</h2>
+    <p id="url"></p>
+    <p id="hostname"></p>
+    <p id="title"></p>
+    <button onclick="changeTitle()">Change Page Title</button>
+  </section>
+
+  <section id="nav-controls">
+    <h2>Navigation Controls</h2>
+    <button onclick="location.reload()">Reload Page</button>
+    <button onclick="location.href='https://www.w3schools.com/'">Go to w3school.com</button>
+    <button onclick="history.back()">Go Back</button>
+    <button onclick="history.forward()">Go Forward</button>
+  </section>
+
+  <script>
+    document.getElementById('browser').textContent = `Browser: ${navigator.appName} ${navigator.appVersion}`;
+    document.getElementById('platform').textContent = `Platform: ${navigator.platform}`;
+    document.getElementById('java').textContent = `Java Enabled: ${navigator.javaEnabled()}`;
+    document.getElementById('resolution').textContent = `Screen Resolution: ${screen.width} x ${screen.height}`;
+    document.getElementById('availablescreen').textContent = `Available Screen Size: ${screen.availWidth} x ${screen.availHeight}`;
+    document.getElementById('colordepth').textContent = `Color Depth: ${screen.colorDepth}`;
+
+    document.getElementById('url').textContent = `URL: ${location.href}`;
+    document.getElementById('hostname').textContent = `Hostname: ${location.hostname}`;
+    document.getElementById('title').textContent = `Page Title: ${document.title}`;
+
+    function changeTitle() {
+      const newTitle = prompt("Enter a new page title:", document.title);
+      if (newTitle) {
+        document.title = newTitle;
+        document.getElementById('title').textContent = `Page Title: ${newTitle}`;
+      }
+    }
+
+    function updateBackground() {
+      const width = window.innerWidth;
+      if (width < 600) {
+        document.body.style.backgroundColor = 'blue';
+      } else if (width >= 600 && width < 992) {
+        document.body.style.backgroundColor = 'green';
+      } else {
+        document.body.style.backgroundColor = 'orange';
+      }
+    }
+
+    window.addEventListener('load', updateBackground);
+    window.addEventListener('resize', updateBackground);
+  </script>
+</body>
+</html>
