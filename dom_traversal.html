@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive DOM Traversal and Manipulation</title>
+  <style>
+    
+    header {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      border-bottom: 2px solid #000;
+      margin-bottom: 20px;
+    }
+
+    .grandparent {
+      background-color: #f9e79f;
+      padding: 20px;
+      margin: auto;
+      width: 50%;
+      text-align: center;
+    }
+
+    .parent {
+      background-color: #aed6f1;
+      margin: 15px;
+      padding: 10px;
+    }
+
+    .child {
+      background-color: #f9c6c9;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    .highlight {
+      border: 3px solid red;
+    }
+
+    .controls {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <strong>Complete Name:</strong> Regine F. Pamor<br>
+  <strong>Sex:</strong> Female<br>
+  <strong>Address:</strong> Burabod, Lagonoy Camarines Sur<br>
+  <strong>Course, Year, and Section:</strong> BSIT 2B<br>
+  <strong>Name of School:</strong> Partido State University<br>
+  <strong>Semester and Academic Year:</strong> 2nd Semester, AY 2024-2025<br>
+  <strong>Subject Code and Title:</strong> PF2 - Event Driven Programming<br>
+  <strong>Name of Subject Instructor:</strong> Arjay F. Abio
+</header>
+
+<h2 style="text-align:center;">DOM Traversal Interactive</h2>
+
+<div class="grandparent" id="grandparent">Grandparent
+  <div class="parent">Parent 1
+    <div class="child">Child 1</div>
+    <div class="child">Child 2</div>
+  </div>
+  <div class="parent">Parent 2
+    <div class="child">Child 3</div>
+    <div class="child">Child 4</div>
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="traverseDown()">Traverse Down</button>
+  <button onclick="traverseUp()">Traverse Up</button>
+  <button onclick="traverseNext()">Traverse Next Sibling</button>
+  <button onclick="traversePrevious()">Traverse Previous Sibling</button>
+  <button onclick="addChild()">Add Child</button>
+  <button onclick="deleteCurrent()">Delete Current</button>
+</div>
+
+<script>
+  let selected = null;
+
+  document.querySelectorAll('.grandparent, .parent, .child').forEach(node => {
+    node.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (selected) selected.classList.remove('highlight');
+      selected = e.currentTarget;
+      selected.classList.add('highlight');
+    });
+  });
+
+  function traverseDown() {
+    if (!selected) return;
+    const firstChild = Array.from(selected.children).find(child => child.classList.contains('parent') || child.classList.contains('child'));
+    if (firstChild) {
+      selected.classList.remove('highlight');
+      selected = firstChild;
+      selected.classList.add('highlight');
+    }
+  }
+
+  function traverseUp() {
+    if (!selected) return;
+    const parent = selected.parentElement;
+    if (parent && (parent.classList.contains('parent') || parent.classList.contains('grandparent'))) {
+      selected.classList.remove('highlight');
+      selected = parent;
+      selected.classList.add('highlight');
+    }
+  }
+
+  function traverseNext() {
+    if (!selected) return;
+    let next = selected.nextElementSibling;
+    while (next && !(next.classList.contains('parent') || next.classList.contains('child'))) {
+      next = next.nextElementSibling;
+    }
+    if (next) {
+      selected.classList.remove('highlight');
+      selected = next;
+      selected.classList.add('highlight');
+    }
+  }
+
+  function traversePrevious() {
+    if (!selected) return;
+    let prev = selected.previousElementSibling;
+    while (prev && !(prev.classList.contains('parent') || prev.classList.contains('child'))) {
+      prev = prev.previousElementSibling;
+    }
+    if (prev) {
+      selected.classList.remove('highlight');
+      selected = prev;
+      selected.classList.add('highlight');
+    }
+  }
+
+  function addChild() {
+    if (!selected) return;
+    if (selected.classList.contains('grandparent')) {
+      const parent = document.createElement('div');
+      parent.className = 'parent';
+      parent.textContent = `Parent ${document.querySelectorAll('.parent').length + 1}`;
+
+      const child1 = document.createElement('div');
+      child1.className = 'child';
+      child1.textContent = `Child ${document.querySelectorAll('.child').length + 1}`;
+      const child2 = document.createElement('div');
+      child2.className = 'child';
+      child2.textContent = `Child ${document.querySelectorAll('.child').length + 2}`;
+
+      parent.appendChild(child1);
+      parent.appendChild(child2);
+      selected.appendChild(parent);
+      addClickListener(parent);
+      addClickListener(child1);
+      addClickListener(child2);
+    } else if (selected.classList.contains('parent')) {
+      const child = document.createElement('div');
+      child.className = 'child';
+      child.textContent = `Child ${document.querySelectorAll('.child').length + 1}`;
+      selected.appendChild(child);
+      addClickListener(child);
+    } else {
+      alert("Cannot add a child to a child node.");
+    }
+  }
+
+  function deleteCurrent() {
+    if (!selected) return;
+    if (selected.classList.contains('grandparent')) {
+      alert("Cannot delete the grandparent node.");
+    } else {
+      const toRemove = selected;
+      traverseUp(); 
+      toRemove.remove();
+    }
+  }
+
+  function addClickListener(element) {
+    element.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (selected) selected.classList.remove('highlight');
+      selected = e.currentTarget;
+      selected.classList.add('highlight');
+    });
+  }
+</script>
+
+</body>
+</html>
